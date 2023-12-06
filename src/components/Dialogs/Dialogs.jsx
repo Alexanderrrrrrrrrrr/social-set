@@ -4,21 +4,36 @@ import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 
 const Dialogs = (props) => {
+    let state = props.dialogsPage
 
-    let dialogsElement = props.state.dialogData.map((d) => <DialogItem name={d.name} id={d.id} />);
-    let messagesElements = props.state.massagesData.map((m) => <Message message={m.massage} />);
+    let dialogsElement = state.dialogs.map((d) => <DialogItem name={d.name} key={d.id} id={d.id} />);
+    let messagesElements = state.messages.map((m) => <Message message={m.massage} key={m.id} />);
+    let newMessageBody = state.newMessageBody;
+
+    let onSendMessageClick = () => {
+        props.sendMessage()
+    }
+
+    let onNewMessageChange = (e) => {
+        let body = e.target.value;
+        props.updateNewMessageBody(body)
+    }
+
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
-               {dialogsElement}
+                {dialogsElement}
             </div>
             <div className={s.messages}>
-                {messagesElements}
-                
+                <div>
+                    {messagesElements}
+                </div>
+                <div><textarea onChange={onNewMessageChange} value={newMessageBody} placeholder="Введите сообщение"></textarea></div>
+                <div><button onClick={onSendMessageClick}>Отправить</button></div>
             </div>
 
         </div>
-        
+
     )
 }
 export default Dialogs;
